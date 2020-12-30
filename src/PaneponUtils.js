@@ -8,7 +8,7 @@ export default class PaneponUtils {
     constructor(panepon) {
         this.panelHeight = panepon.settings.panelHeight;
         this.panelWidth = panepon.settings.panelWidth;
-        this.numberOfRegularPanels = paneponSettings.numberOfRegularPanels;
+        this.numberOfRegularPanels = panepon.settings.numberOfRegularPanels;
     }
 
     generatePanelTypesForNewLine() {

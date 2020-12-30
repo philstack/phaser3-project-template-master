@@ -151,9 +151,9 @@ new Phaser.Game({
   type: Phaser.AUTO,
   parent: "phaser-example",
   title: 'untitled Panepon/Tetris Attack/Puzzle League clone',
-  width: window.innerWidth,
-  height: window.innerHeight,
-  //zoom: Math.max(Math.min(window.innerHeight / 176, window.innerWidth / 96), 1),
+  width: 96,
+  height: 176,
+  zoom: Math.max(Math.min(window.innerHeight / 176, window.innerWidth / 96), 1),
   pixelArt: true,
   scene: panepon,
 });

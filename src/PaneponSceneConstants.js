@@ -23,3 +23,6 @@ export const PANEL_STATES = {
     flashing: 'flashing',
     scared: 'scared'
 };
+
+
+export const anims_cursor_pulse = { key: 'cursor_pulse', frames: [0, 1], duration: 1000, repeat: -1 };

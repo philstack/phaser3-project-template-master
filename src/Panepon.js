@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
 import PaneponSettings from './PaneponSettings';
 import PaneponUtils from './PaneponUtils';
-import Cursor from './Cursor';
+import Cursor from './PaneponCursor';
 import PaneponAssetManager from './PaneponAssetManager';
-import Stack from './Stack';
+import PaneponGameBoard from './PaneponGameBoard';
 import PaneponControls from './PaneponControls';
 
-const CURSOR_KEYS_TOTAL = 4;
+import CONTROLS_CURSOR_TOTALCURSORKEYS from './paneponSceneConstants';
+import PaneponCursor from './PaneponCursor';
 
 export default class Panepon extends Phaser.Scene {
   constructor(config, paneponSettings) {
@@ -17,8 +18,7 @@ export default class Panepon extends Phaser.Scene {
 
     //Populated in create()
     this.assets = {}; 
-    this.stack = null; 
-    this.cursor = null; 
+    this.gameBoard = null; 
     this.controls = null;
     this.utils = null;
   }
@@ -30,8 +30,7 @@ export default class Panepon extends Phaser.Scene {
   create() {
     PaneponAssetManager.createBackground(this);
     this.utils = new PaneponUtils(this);
-    this.cursor = new Cursor(this);
-    this.stack = new Stack(this);
+    this.gameBoard = new PaneponGameBoard(this);
     this.controls = new PaneponControls(this);
     
   }
@@ -42,19 +41,21 @@ export default class Panepon extends Phaser.Scene {
     // Gets which cursor keys are down
     // Updates the position of the cursor based on input
     let cursorKeys = this.controls.getCursorKeysInfo();
-    if (cursorKeys.justDown.length) {
-      for (let key of cursorKeys.justDown) {
-        this.cursor.updatePositionByKeycode(key.keyCode);
+
+    let cursorKeysJustDown = this.controls.getCursorKeysJustDown();
+    if (cursorKeysJustDown.length) {
+      for (let key of cursorKeysJustDown) {
+        this.gameBoard.cursor.updatePositionByKeycode(key.keyCode);
       }
-      if (cursorKeys.justDown.length === cursorKeys.down.length) {
-        this.cursor.stuck = true;
+      if (justDown.length === cursorKeys.down.length) {
+        this.gameBoard.cursor.stuck = true;
       }
-    } else if ((this.cursor.stuck && cursorKeys.downForDuration.length) || !cursorKeys.down.length || cursorKeys.down.length === cursorKeys.max) {
-      this.cursor.stuck = false;
+    } else if ((this.gameBoard.cursor.stuck && cursorKeys.downForDuration.length) || !cursorKeys.down.length || cursorKeys.down.length === cursorKeys.max) {
+      this.gameBoard.cursor.stuck = false;
     } else {
-      if (!this.cursor.stuck) {
+      if (!this.gameBoard.cursor.stuck) {
         for (let key of cursorKeys.down) {
-          this.cursor.updatePositionByKeycode(key.keyCode);
+          this.gameBoard.cursor.updatePositionByKeycode(key.keyCode);
         }
       }
     }
@@ -82,14 +83,14 @@ export default class Panepon extends Phaser.Scene {
     //   for (let key of cursorKeysJustDown) {
     //     this.cursor.updatePositionByKeycode(key.keyCode);
     //   }
-    //   if (cursorKeysJustDown.length === keysDown.length) this.cursor.stuck = true;
+    //   if (cursorKeysJustDown.length === keysDown.length) this.gameBoard.cursor.stuck = true;
     // } else if (
-    //   (this.cursor.stuck && keysDownForDuration.length)
+    //   (this.gameBoard.cursor.stuck && keysDownForDuration.length)
     //   || !keysDown.length || keysDown.length === cursorKeys.length) {
-    //   this.cursor.stuck = false;
+    //   this.gameBoard.cursor.stuck = false;
 
     // } else {
-    //   if (!this.cursor.stuck) {
+    //   if (!this.gameBoard.cursor.stuck) {
     //     for (let key of keysDown) {
     //       this.cursor.updatePositionByKeycode(key.keyCode);
     //     }
@@ -102,9 +103,9 @@ export default class Panepon extends Phaser.Scene {
 
     // console.log('this');
     // if (keysDown.length) {
-    //   if (this.cursor.stuck) {
+    //   if (this.gameBoard.cursor.stuck) {
     //     if (keysDownForDuration.length) {
-    //       this.cursor.stuck = false;
+    //       this.gameBoard.cursor.stuck = false;
 
     //     }
     //   }
@@ -113,7 +114,7 @@ export default class Panepon extends Phaser.Scene {
     //       for (let key of cursorKeysJustDown) {
     //         this.cursor.updatePositionByKeycode(key.keyCode);
     //       }
-    //       this.cursor.stuck = true;
+    //       this.gameBoard.cursor.stuck = true;
     //     } else {
     //       for (let key of cursorKeysJustDown) {
     //         this.cursor.updatePositionByKeycode(key.keyCode);
@@ -128,7 +129,7 @@ export default class Panepon extends Phaser.Scene {
 
     // } else {
     //   if (!keysDown.length || keysDown.length === cursorKeys.length) {
-    //     this.cursor.stuck = false;
+    //     this.gameBoard.cursor.stuck = false;
       
     //   } else {
     //     if (this.cursor.unlocked) {

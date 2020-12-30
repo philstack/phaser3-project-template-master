@@ -2,16 +2,16 @@ import Phaser from 'phaser';
 
 const CURSOR_KEYS_TOTAL = 4;
 
-export default class Cursor extends Phaser.GameObjects.Sprite {
-  constructor(panepon) {
-    super(panepon, -2, -2, 'cursor');
-    panepon.add.existing(this);
+export default class PaneponCursor extends Phaser.GameObjects.Sprite {
+  constructor(scene) {
+    super(scene, -2, -2, 'cursor');
+    scene.add.existing(this);
     this.setOrigin(0);
     this.setDepth(3);
 
-    panepon.anims.create({
+    scene.anims.create({
       key: 'cursor.pulse',
-      frames: panepon.anims.generateFrameNumbers('cursor', { start: 0, end: 1 }),
+      frames: scene.anims.generateFrameNumbers('cursor', { start: 0, end: 1 }),
       duration: 1000,
       repeat: -1
     });
